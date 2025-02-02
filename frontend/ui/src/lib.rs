@@ -1,7 +1,11 @@
-//! This crate contains all shared UI for the workspace.
+mod components;
+pub use components::Navbar;
+pub use components::Hero;
 
-mod hero;
-pub use hero::Hero;
+mod router;
+pub use router::Route;
 
-mod navbar;
-pub use navbar::Navbar;
+mod routes;
+pub use routes::Blog;
+pub use routes::Home;
+
