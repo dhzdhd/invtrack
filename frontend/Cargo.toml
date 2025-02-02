@@ -9,6 +9,7 @@ members = [
 
 [workspace.dependencies]
 dioxus = { version = "0.6.0" }
+dioxus-sdk = { version = "0.6", features = [] }
 
 # workspace
 ui = { path = "ui" }

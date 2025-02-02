@@ -5,6 +5,5 @@ use crate::Hero;
 pub fn Home() -> Element {
     rsx! {
         Hero {}
-
     }
 }
