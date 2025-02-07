@@ -42,4 +42,4 @@ WORKDIR /var/task
 
 # ENTRYPOINT ["/lambda-entrypoint.sh"]
 # CMD [ "bootstrap" ]
-CMD [ "/usr/local/bin/aws-lambda-rie" "$RUNTIME_ENTRYPOINT" ]
+CMD [ "/usr/local/bin/aws-lambda-rie" "/var/runtime/bootstrap" ]
