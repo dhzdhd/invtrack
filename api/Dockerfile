@@ -34,10 +34,12 @@ ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin
 ENV LD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib
 ENV LAMBDA_TASK_ROOT=/var/task
 ENV LAMBDA_RUNTIME_DIR=/var/runtime
+ENV RUNTIME_ENTRYPOINT=/var/runtime/bootstrap
 
 EXPOSE 8080
 
 WORKDIR /var/task
 
-ENTRYPOINT ["/lambda-entrypoint.sh"]
-CMD [ "bootstrap" ]
+# ENTRYPOINT ["/lambda-entrypoint.sh"]
+# CMD [ "bootstrap" ]
+CMD [ "/usr/local/bin/aws-lambda-rie" "$RUNTIME_ENTRYPOINT" ]
