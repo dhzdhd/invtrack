@@ -9,6 +9,6 @@ pub fn Layout() -> Element {
         document::Link { rel: "stylesheet", href: MAIN_CSS }
 
         Navbar { }
-        Outlet::<Route> {} 
+        Outlet::<Route> {}  // <slot>
     }
 }
