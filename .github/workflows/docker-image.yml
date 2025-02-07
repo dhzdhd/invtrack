@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build the Docker image
+      run: docker build api/ --file Dockerfile --tag invtrack:latest
+
+    - name: Push to ECR
+      id: ecr
+      uses: jwalton/gh-ecr-push@v2
+      with:
+        access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        region: ap-south-1
+        image: invtrack:latest
+        local-image: invtrack:latest
