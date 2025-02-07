@@ -25,3 +25,12 @@ jobs:
         region: ap-south-1
         image: invtrack:latest
         local-image: invtrack:latest
+
+    - name: Update lambda
+      uses: appleboy/lambda-action@v0.2.0
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: ap-south-1
+        function_name: invtrack
+        image_uri: 276098625691.dkr.ecr.ap-south-1.amazonaws.com/invtrack:latest
