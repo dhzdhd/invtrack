@@ -43,6 +43,10 @@ async fn index() -> &'static str {
     "Hello World" 
 }
 
+async fn test() -> &'static str {
+    "Hello World this api is a workin !!!!!!!!!!!!!" 
+}
+
 type ServerError = (StatusCode, String);
 
 fn internal_server_error<E: std::error::Error>(err: E) -> ServerError {
@@ -62,7 +66,7 @@ async fn main() -> Result<(), Error> {
     let config = Manager::new(db_url, Runtime::Tokio1);
     let pool = Pool::builder(config).build().unwrap();
 
-    let app = Router::new().route("/", get(index)).route("/items", get(get_items)).with_state(pool);
+    let app = Router::new().route("/", get(index)).route("/test", get(test)).route("/items", get(get_items)).with_state(pool);
 
     if cfg!(debug_assertions) {
         let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
