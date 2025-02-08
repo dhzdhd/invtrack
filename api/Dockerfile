@@ -41,5 +41,5 @@ EXPOSE 8080
 WORKDIR /var/task
 
 # ENTRYPOINT ["/lambda-entrypoint.sh"]
-CMD [ "bootstrap" ]
+CMD [ "/var/runtime/bootstrap" ]
 # CMD [ "/usr/local/bin/aws-lambda-rie" "/var/runtime/bootstrap" ]
