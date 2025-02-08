@@ -5,8 +5,13 @@ use axum::{
 use deadpool_diesel::postgres::{Manager, Pool, Runtime};
 use diesel::prelude::*;
 use lambda_http::{http::StatusCode, run, tracing, Error};
+use routes::item::get_items;
 use serde::{Deserialize, Serialize};
 use dotenvy::dotenv;
+
+mod routes;
+mod tables;
+mod models;
 
 table! {
     posts (id) {
@@ -57,7 +62,7 @@ async fn main() -> Result<(), Error> {
     let config = Manager::new(db_url, Runtime::Tokio1);
     let pool = Pool::builder(config).build().unwrap();
 
-    let app = Router::new().route("/", get(index)).with_state(pool);
+    let app = Router::new().route("/", get(index)).route("/items", get(get_items)).with_state(pool);
 
     if cfg!(debug_assertions) {
         let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
