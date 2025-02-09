@@ -1,50 +1,21 @@
 use axum::{
-    routing::get,
-    Router,
+    routing::get, Router
 };
 use deadpool_diesel::postgres::{Manager, Pool, Runtime};
-use diesel::prelude::*;
 use lambda_http::{http::StatusCode, run, tracing, Error};
-use routes::item::get_items;
-use serde::{Deserialize, Serialize};
+use routes::item::{create_item, get_items};
 use dotenvy::dotenv;
 
 mod routes;
-mod tables;
 mod models;
-
-table! {
-    posts (id) {
-        id -> Integer,
-        title -> Text,
-        content -> Text,
-        published -> Bool,
-    }
-}
-
-#[derive(Default, Queryable, Selectable, Serialize)]
-struct Post {
-    id: i32,
-    title: String,
-    content: String,
-    published: bool,
-}
-
-#[derive(Deserialize, Insertable)]
-#[diesel(table_name = posts)]
-struct NewPost {
-    title: String,
-    content: String,
-    published: bool,
-}
-
+mod schema;
 
 async fn index() -> &'static str {
     "Hello World" 
 }
 
 async fn test() -> &'static str {
-    "Hello World this api is a workin !!!!!!!!!!!!!" 
+    "Healthy" 
 }
 
 type ServerError = (StatusCode, String);
@@ -66,7 +37,7 @@ async fn main() -> Result<(), Error> {
     let config = Manager::new(db_url, Runtime::Tokio1);
     let pool = Pool::builder(config).build().unwrap();
 
-    let app = Router::new().route("/", get(index)).route("/test", get(test)).route("/items", get(get_items)).with_state(pool);
+    let app = Router::new().route("/", get(index)).route("/health", get(test)).route("/items", get(get_items).post(create_item)).with_state(pool);
 
     if cfg!(debug_assertions) {
         let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();

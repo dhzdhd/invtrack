@@ -47,6 +47,7 @@ dependencies = [
  "dotenvy_macro",
  "lambda_http",
  "serde",
+ "serde_json",
  "tokio",
 ]
 
