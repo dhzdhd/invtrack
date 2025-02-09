@@ -23,6 +23,7 @@ pub struct Item {
 
 #[derive(Deserialize, Insertable)]
 #[diesel(table_name = items)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct NewItem {
     name: String,
     description: String,

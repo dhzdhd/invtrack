@@ -1,21 +1,22 @@
-use axum::{
-    routing::get, Router
-};
+use axum::{routing::get, Router};
 use deadpool_diesel::postgres::{Manager, Pool, Runtime};
-use lambda_http::{http::StatusCode, run, tracing, Error};
-use routes::items::{create_item, get_items};
 use dotenvy::dotenv;
+use lambda_http::{http::StatusCode, run, tracing, Error};
+use routes::{
+    categories::{create_category, get_categories},
+    items::{create_item, get_items},
+};
 
-mod routes;
 mod models;
+mod routes;
 mod schema;
 
 async fn index() -> &'static str {
-    "Hello World" 
+    "Hello World"
 }
 
 async fn healthcheck() -> &'static str {
-    "Healthy" 
+    "Healthy"
 }
 
 type ServerError = (StatusCode, String);
@@ -36,10 +37,16 @@ async fn main() -> Result<(), Error> {
     let config = Manager::new(db_url, Runtime::Tokio1);
     let pool = Pool::builder(config).build().unwrap();
 
-    let app = Router::new().route("/", get(index)).route("/health", get(healthcheck)).route("/items", get(get_items).post(create_item)).with_state(pool);
+    let app = Router::new()
+        .route("/", get(index))
+        .route("/health", get(healthcheck))
+        .route("/items", get(get_items).post(create_item))
+        .route("/categories", get(get_categories).post(create_category))
+        .with_state(pool);
 
     if cfg!(debug_assertions) {
         let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
+        println!("Listening on http://localhost:8080");
         axum::serve(listener, app).await?;
     } else {
         run(app).await?;
