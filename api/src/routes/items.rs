@@ -2,7 +2,7 @@ use axum::{extract::State, http::StatusCode, Json};
 use deadpool_diesel::postgres::Pool;
 use diesel::{RunQueryDsl, SelectableHelper};
 
-use crate::{internal_server_error, models::item_model::{Item, NewItem}, schema::items::{self}};
+use crate::{internal_server_error, models::item::{Item, NewItem}, schema::items::{self}};
 
 pub async fn get_items() -> &'static str {
     "hi"
