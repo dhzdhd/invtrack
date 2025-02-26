@@ -1,10 +1,14 @@
-use axum::{routing::get, Router};
+use axum::{
+    extract::DefaultBodyLimit,
+    routing::{get, post},
+    Router,
+};
 use deadpool_diesel::postgres::{Manager, Pool, Runtime};
 use dotenvy::dotenv;
 use lambda_http::{http::StatusCode, run, tracing, Error};
 use routes::{
     categories::{create_category, get_categories},
-    items::{create_item, get_items},
+    items::{analyze_image, create_item, get_items},
 };
 
 mod models;
@@ -41,7 +45,9 @@ async fn main() -> Result<(), Error> {
         .route("/", get(index))
         .route("/health", get(healthcheck))
         .route("/items", get(get_items).post(create_item))
+        .route("/analyze", post(analyze_image))
         .route("/categories", get(get_categories).post(create_category))
+        .layer(DefaultBodyLimit::max(51200)) // 50 MB
         .with_state(pool);
 
     if cfg!(debug_assertions) {
