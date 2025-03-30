@@ -1,19 +1,13 @@
 use crate::{
     internal_server_error,
-    models::item::{Item, NewItem},
-    schema::items::dsl::items,
-    schema::items::table,
+    models::item::{GeminiResponse, Item, NewItem},
+    schema::items::{dsl::items, table},
 };
-use axum::{
-    extract::{Multipart, State},
-    http::StatusCode,
-    Json,
-};
-use base64::{prelude::BASE64_STANDARD, Engine};
+use axum::{extract::State, http::StatusCode, Json};
 use deadpool_diesel::postgres::Pool;
 use diesel::{RunQueryDsl, SelectableHelper};
 use serde::{Deserialize, Serialize};
-use serde_json::{json, to_string, Value};
+use serde_json::json;
 
 #[derive(Serialize, Deserialize)]
 pub struct ImagePayload {
@@ -50,43 +44,32 @@ pub async fn get_items(State(pool): State<Pool>) -> Result<Json<Vec<Item>>, (Sta
 }
 
 const GEMINI_URL: &str =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 pub async fn analyze_image(
     Json(payload): Json<ImagePayload>,
-) -> Result<Json<Option<Item>>, (StatusCode, String)> {
-    // let mut b64_str = String::new();
+) -> Result<Json<Vec<String>>, (StatusCode, String)> {
     let b64_str = payload.image;
     let gemini_key = std::env::var("GEMINI_API_KEY").map_err(internal_server_error)?;
-
-    // while let Ok(Some(field)) = image.next_field().await {
-    //     println!("hefefee");
-
-    //     // if let Ok(bytes) = field.bytes().await {
-    //     let bytes = field.bytes().await.map_err(internal_server_error)?;
-    //     println!("{}", bytes.len());
-    //     // Disable line wrapping
-    //     let base64 = BASE64_STANDARD.encode(bytes);
-    //     b64_str.push_str(base64.as_str());
-    //     // }
-    // }
 
     let client = reqwest::Client::new();
     let json = json!({
       "contents": [{
+        "role": "user",
         "parts":[
-            {"text": "Caption this image."},
+            {"text": "List all items in the image."},
             {
               "inline_data": {
-                "mime_type":"image/png",
+                "mime_type":"image/jpeg",
                 "data": b64_str,
               }
             }
         ]
-      }]
+      }],
+      "generationConfig": {
+        "responseMimeType": "application/json",
+      },
     });
-    println!("{json:?}");
-    // let body = to_string(&json).map_err(internal_server_error)?;
 
     let res = client
         .post(GEMINI_URL)
@@ -96,8 +79,21 @@ pub async fn analyze_image(
         .send()
         .await
         .map_err(internal_server_error)?;
-    let resp: Value = res.json().await.map_err(internal_server_error)?;
-    println!("{resp:?}");
 
-    Ok(Json(None))
+    let resp = res
+        .json::<GeminiResponse>()
+        .await
+        .map_err(internal_server_error)?;
+
+    let names = resp
+        .candidates
+        .iter()
+        .map(|candidate| candidate.content.parts.iter().map(|part| part.text.clone()))
+        .flatten()
+        .map(|str| serde_json::from_str::<Vec<String>>(str.as_str()).map_err(internal_server_error))
+        .flatten()
+        .flatten()
+        .collect::<Vec<String>>();
+
+    Ok(Json::from(names))
 }

@@ -45,9 +45,12 @@ async fn main() -> Result<(), Error> {
         .route("/", get(index))
         .route("/health", get(healthcheck))
         .route("/items", get(get_items).post(create_item))
-        .route("/analyze", post(analyze_image))
+        .route(
+            "/analyze",
+            // Gemini supports max 7MB images
+            post(analyze_image).layer(DefaultBodyLimit::max(7 * 1024 * 1024)),
+        )
         .route("/categories", get(get_categories).post(create_category))
-        .layer(DefaultBodyLimit::max(51200)) // 50 MB
         .with_state(pool);
 
     if cfg!(debug_assertions) {
