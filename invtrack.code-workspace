@@ -13,7 +13,7 @@
 			"path": "frontend-ps"
 		},
 		{
-			"path": "vlm"
+			"path": "frontend-gleam"
 		}
 	],
 	"settings": {}
