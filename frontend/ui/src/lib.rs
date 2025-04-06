@@ -1,5 +1,5 @@
 mod components;
-pub use components::Navbar;
+pub use components::Header;
 
 mod router;
 pub use router::Route;

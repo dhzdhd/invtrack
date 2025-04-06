@@ -1,4 +1,4 @@
-use crate::{Navbar, Route};
+use crate::{Header, Route};
 use dioxus::prelude::*;
 
 const MAIN_CSS: Asset = asset!("/assets/output.css");
@@ -8,7 +8,9 @@ pub fn Layout() -> Element {
     rsx! {
         document::Link { rel: "stylesheet", href: MAIN_CSS }
 
-        Navbar {}
+        Header {
+            button {}
+        }
         Outlet::<Route> {} // <slot>
     }
 }

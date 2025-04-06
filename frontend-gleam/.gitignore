@@ -3,8 +3,8 @@
 build/
 erl_crash.dump
 node_modules/
-priv/
 dist/
+priv/
 
 # Logs
 logs
@@ -30,3 +30,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.psc-ide-port

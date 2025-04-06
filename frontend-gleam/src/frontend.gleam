@@ -1,5 +1,6 @@
 import gleam/uri.{type Uri}
 import lustre
+import lustre/attribute
 import lustre/effect.{type Effect}
 import lustre/element.{text}
 import lustre/element/html.{button, div, p}
@@ -49,8 +50,9 @@ fn update(model, msg) {
 
 fn view(_model: Model) {
   div([], [
-    button([on_click(Incr)], [text(" + ")]),
-    p([], [text("Hello World!")]),
+    button([on_click(Incr), attribute.class("bg-red-700")], [text(" + ")]),
+    p([], [text("Hello efjeifjld!")]),
+    p([], [text("Helliiii")]),
     button([on_click(Decr)], [text(" - ")]),
   ])
 }

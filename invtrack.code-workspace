@@ -10,7 +10,7 @@
 			"path": "frontend"
 		},
 		{
-			"path": "frontend-ps"
+			"path": "frontend-svelte"
 		},
 		{
 			"path": "frontend-gleam"
