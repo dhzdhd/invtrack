@@ -7,14 +7,8 @@
 			"path": "api"
 		},
 		{
-			"path": "frontend"
+			"path": "client"
 		},
-		{
-			"path": "frontend-svelte"
-		},
-		{
-			"path": "frontend-gleam"
-		}
 	],
 	"settings": {}
 }
