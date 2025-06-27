@@ -1,50 +1,30 @@
 package dev.dhzdhd.invtrack
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import invtrack.composeapp.generated.resources.Res
-import invtrack.composeapp.generated.resources.compose_multiplatform
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import dev.dhzdhd.invtrack.settings.models.Theme
+import dev.dhzdhd.invtrack.settings.viewmodels.SettingsViewModel
+import dev.dhzdhd.invtrack.settings.views.SettingsView
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
+    val settingsViewModel = koinViewModel<SettingsViewModel>()
+    val settings by settingsViewModel.settings.collectAsState()
 
-        Scaffold(
-            topBar = {
-                TopAppBar(title = {
-                    Text("Home")
-                })
-            }, content = {
-                Column(
-                    modifier = Modifier
-                        .padding(200.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Button(onClick = { showContent = !showContent }) {
-                        Text("Click me!")
-                    }
-                    AnimatedVisibility(showContent) {
-                        val greeting = remember { Greeting().greet() }
-                        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Image(painterResource(Res.drawable.compose_multiplatform), null)
-                            Text("Compose: $greeting")
-                        }
-                    }
-                }
-            }
-        )
+    MaterialTheme(
+        colorScheme = when (settings.theme) {
+            Theme.LIGHT -> lightColorScheme()
+            Theme.DARK -> darkColorScheme()
+            Theme.SYSTEM -> darkColorScheme()
+        }
+    ) {
+        SettingsView()
     }
 }
