@@ -3,12 +3,12 @@ package dev.dhzdhd.invtrack.settings.models
 import kotlinx.serialization.Serializable
 
 enum class Theme {
-    LIGHT, DARK, SYSTEM
+    LIGHT, DARK
 }
 
 @Serializable
 data class Settings(val theme: Theme) {
     companion object {
-        val Default = Settings(Theme.SYSTEM)
+        val Default = Settings(Theme.DARK)
     }
 }

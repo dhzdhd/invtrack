@@ -9,6 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.dhzdhd.invtrack.home.views.HomeRoute
+import dev.dhzdhd.invtrack.home.views.HomeView
 import dev.dhzdhd.invtrack.settings.models.Theme
 import dev.dhzdhd.invtrack.settings.viewmodels.SettingsViewModel
 import dev.dhzdhd.invtrack.settings.views.SettingsRoute
@@ -23,17 +25,18 @@ fun App() {
     val settingsViewModel = koinViewModel<SettingsViewModel>()
     val settings by settingsViewModel.settings.collectAsState()
 
-
     MaterialTheme(
         colorScheme = when (settings.theme) {
             Theme.LIGHT -> lightColorScheme()
             Theme.DARK -> darkColorScheme()
-            Theme.SYSTEM -> darkColorScheme()
         }
     ) {
-        NavHost(navController = navController, startDestination = SettingsRoute) {
+        NavHost(navController = navController, startDestination = HomeRoute) {
+            composable<HomeRoute> {
+                HomeView(navController)
+            }
             composable<SettingsRoute> {
-                SettingsView(settings, settingsViewModel::dispatch)
+                SettingsView(navController, settings, settingsViewModel::dispatch)
             }
         }
     }
