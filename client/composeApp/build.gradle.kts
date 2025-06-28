@@ -79,6 +79,8 @@ kotlin {
             api(libs.koin.annotations)
 
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
+            implementation("io.ktor:ktor-client-core:3.2.0")
+            implementation("io.ktor:ktor-client-cio:3.2.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

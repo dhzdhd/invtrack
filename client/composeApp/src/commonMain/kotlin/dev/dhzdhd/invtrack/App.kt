@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.dhzdhd.invtrack.home.viewmodels.HomeViewModel
 import dev.dhzdhd.invtrack.home.views.HomeRoute
 import dev.dhzdhd.invtrack.home.views.HomeView
 import dev.dhzdhd.invtrack.settings.models.Theme
@@ -33,7 +34,9 @@ fun App() {
     ) {
         NavHost(navController = navController, startDestination = HomeRoute) {
             composable<HomeRoute> {
-                HomeView(navController)
+                val homeViewModel = koinViewModel<HomeViewModel>()
+                val items by homeViewModel.items.collectAsState()
+                HomeView(navController, items, homeViewModel::dispatch)
             }
             composable<SettingsRoute> {
                 SettingsView(navController, settings, settingsViewModel::dispatch)
