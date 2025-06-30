@@ -1,10 +1,12 @@
 package dev.dhzdhd.invtrack.home.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.dhzdhd.invtrack.home.models.Item
 import dev.dhzdhd.invtrack.home.repositories.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 sealed class HomeAction {
@@ -16,17 +18,21 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private val state = MutableStateFlow<List<Item>>(listOf())
     val items = state.asStateFlow()
 
+    init {
+        getItems()
+    }
+
     fun dispatch(action: HomeAction) {
         when (action) {
             is HomeAction.AddItem -> addItem(action.item)
         }
     }
 
-    private fun getItems(): List<Item> {
-//        viewModelScope {
-//            repository.getItems()
-//        }
-        return state.value
+    private fun getItems() {
+        viewModelScope.launch {
+            val items = repository.getItems()
+            state.value = items.getOrDefault(listOf())
+        }
     }
 
     private fun addItem(item: Item) {

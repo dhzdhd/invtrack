@@ -40,11 +40,15 @@ fun HomeView(
         },
         content = { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
-                items.map { it ->
-                    ListItem(
-                        modifier = Modifier.clickable(true, onClick = {}),
-                        headlineContent = { Text(it.name, style = MaterialTheme.typography.titleLarge) },
-                    )
+                if (items.isEmpty()) {
+                    Text("No items yet")
+                } else {
+                    items.map { it ->
+                        ListItem(
+                            modifier = Modifier.clickable(true, onClick = {}),
+                            headlineContent = { Text(it.name, style = MaterialTheme.typography.titleLarge) },
+                        )
+                    }
                 }
             }
         }

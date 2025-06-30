@@ -8,15 +8,20 @@ import org.koin.core.annotation.Single
 
 @Single
 class HomeRepository(private val httpClient: HttpClient) {
-    suspend fun getItems(): List<Item> {
-        httpClient.get {
-            url("https://api.example.com/items")
-        }.body<List<Item>>().also {
-            println(it)
+    suspend fun getItems(): Result<List<Item>> {
+        return runCatching {
+            httpClient.get {
+                url("https://api.example.com/items")
+            }.body<List<Item>>().also {
+                println(it)
+            }
+
+            return Result.success(
+                listOf(
+                    Item(id = "1", name = "Item 1", quantity = 10, duration = kotlin.time.Duration.ZERO),
+                    Item(id = "2", name = "Item 2", quantity = 5, duration = kotlin.time.Duration.ZERO)
+                )
+            )
         }
-        return listOf(
-            Item(id = "1", name = "Item 1", quantity = 10, duration = kotlin.time.Duration.ZERO),
-            Item(id = "2", name = "Item 2", quantity = 5, duration = kotlin.time.Duration.ZERO)
-        )
     }
 }
