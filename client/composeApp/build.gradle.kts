@@ -62,6 +62,11 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.ktor.client.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -79,8 +84,7 @@ kotlin {
             api(libs.koin.annotations)
 
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
-            implementation("io.ktor:ktor-client-core:3.2.0")
-            implementation("io.ktor:ktor-client-cio:3.2.0")
+            implementation(libs.ktor.client.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -88,6 +92,8 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+
+            implementation(libs.ktor.client.okhttp)
         }
     }
 
