@@ -1,4 +1,4 @@
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::{Duration, NaiveDate, NaiveDateTime};
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -44,6 +44,7 @@ pub struct Item {
     category_id: Uuid,
     price: i32,
     image_url: String,
+    duration: Option<Duration>,
     expiry_date: Option<NaiveDate>,
     created_at: NaiveDateTime,
     updated_at: NaiveDateTime,

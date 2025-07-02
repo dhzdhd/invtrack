@@ -19,6 +19,7 @@ diesel::table! {
         category_id -> Uuid,
         price -> Int4,
         image_url -> Varchar,
+        duration -> Nullable<Interval>,
         expiry_date -> Nullable<Date>,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,

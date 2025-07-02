@@ -31,6 +31,11 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private fun getItems() {
         viewModelScope.launch {
             val items = repository.getItems()
+
+            if (items.isFailure) {
+                println("Failed to fetch items: ${items.exceptionOrNull()}")
+            }
+
             state.value = items.getOrDefault(listOf())
         }
     }

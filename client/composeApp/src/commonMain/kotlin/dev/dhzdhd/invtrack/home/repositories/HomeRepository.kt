@@ -11,17 +11,12 @@ class HomeRepository(private val httpClient: HttpClient) {
     suspend fun getItems(): Result<List<Item>> {
         return runCatching {
             httpClient.get {
-                url("https://api.example.com/items")
+                url("http://localhost:8080/items")
             }.body<List<Item>>().also {
                 println(it)
             }
 
-            return Result.success(
-                listOf(
-                    Item(id = "1", name = "Item 1", quantity = 10, duration = kotlin.time.Duration.ZERO),
-                    Item(id = "2", name = "Item 2", quantity = 5, duration = kotlin.time.Duration.ZERO)
-                )
-            )
+            return Result.success(listOf())
         }
     }
 }

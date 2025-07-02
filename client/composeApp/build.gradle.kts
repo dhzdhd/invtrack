@@ -85,6 +85,10 @@ kotlin {
 
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
