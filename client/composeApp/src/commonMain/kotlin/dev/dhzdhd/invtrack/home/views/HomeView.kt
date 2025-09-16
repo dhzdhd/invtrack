@@ -38,6 +38,15 @@ fun HomeView(
                 }
             })
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+//                dispatch(HomeAction.AddItem(Item(name = "New Item")))
+            }) {
+//                Icon(
+
+                //                    painter = painterResource(Res.drawable.add_item),
+            }
+        },
         content = { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
                 if (items.isEmpty()) {

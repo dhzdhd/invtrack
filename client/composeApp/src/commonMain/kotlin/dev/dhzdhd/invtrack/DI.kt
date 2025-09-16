@@ -12,21 +12,11 @@ import org.koin.ksp.generated.module
 
 
 @Module
-@ComponentScan(
-    "dev.dhzdhd.invtrack.settings.viewmodels",
-    "dev.dhzdhd.invtrack.settings.repositories",
-    "dev.dhzdhd.invtrack.settings.models",
-    "dev.dhzdhd.invtrack.settings.views"
-)
+@ComponentScan("dev.dhzdhd.invtrack.settings")
 class SettingsModule
 
 @Module
-@ComponentScan(
-    "dev.dhzdhd.invtrack.home.viewmodels",
-    "dev.dhzdhd.invtrack.home.repositories",
-    "dev.dhzdhd.invtrack.home.models",
-    "dev.dhzdhd.invtrack.home.views"
-)
+@ComponentScan("dev.dhzdhd.invtrack.home")
 class HomeModule {
     @Single
     fun httpClient() = HttpClient {
